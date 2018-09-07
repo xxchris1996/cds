@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Insert title here</title>
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" >
+<link rel="stylesheet" href="resources/css/font-awesome.min.css" >
+</head>
+<body>
+
+<div id="app">
+	
+	<table class="table " >
+
+		<thead>
+			<tr>
+				<th>选择</th>
+				<th>分类编号</th>
+				<th>分类名称</th>
+				<th>分类说明</th>
+				<th>操作</th>
+			</tr>
+					
+		
+	<div >
+	  <input v-model ="student.stu_name" type="text" class="form-control-plaintext" id="inputgender" >
+    </div>
+	
+			
+			
+	
+</div>
+
+
+
+<!-- 在body结尾之前引入以下js文件。 注意导入顺序不可以随意改变。 -->
+<script src="resources/js/jquery.min.js" ></script>
+<script src="resources/js/bootstrap.bundle.min.js"></script>
+<script src="resources/layer/layer.js" ></script>
+<script src="resources/js/sweetalert.min.js" ></script>
+<script type="text/javascript" src="resources/js/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/my.js"></script>
+<script type="text/javascript">
+
+	new Vue({
+		el:'#app',
+		data:{
+			student:{},
+			
+		},
+		mounted(){
+			My.loadData(
+					{
+						 url:'stuList'
+					},
+			(data) => {
+				console.log("123");
+				this.student =data;
+			}
+			);
+		}
+		
+		
+	});
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Insert title here</title>
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" >
+<link rel="stylesheet" href="resources/css/font-awesome.min.css" >
+</head>
+<body>
+
+<div id="information" class="container-fluid" style="padding:0 2px 0 2px;">
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">安全管理</li>
+    <li class="breadcrumb-item active" >用户管理</li>
+  </ol>
+</nav>
+
+<form style="padding:0 20px 0 20px;">
+<!-- 姓名、性别、学号-->
+  <div class="form-row" >
+    <div class="form-group col-2 "> 
+      <label for="inputstu_name" style="font-weight:bold;">姓名</label>
+      <input v-model="student.stu_name" type="text" class="form-control-plaintext" id="inputstu_name" readonly="readonly" placeholder="name">
+    </div>
+    <div class="form-group col-2">
+      <label for="inputgender" style="font-weight:bold;">性别</label>
+      <input v-model="student.stu_xingbie" type="text" class="form-control-plaintext" id="inputgender" readonly="readonly" placeholder="gender">
+    </div>
+    <div class="form-group col-2 "> 
+      <label for="inputstu_num" style="font-weight:bold;">学号</label>
+      <input v-model="student.stu_xuehao" type="number" class="form-control-plaintext" id="inputstu_num" readonly="readonly" placeholder="NO.">
+    </div>
+
+  </div>
+<!-- 生日、民族、籍贯、电话 --> 
+  <div class="form-row" >
+    <div class="form-group col-2 "> 
+      <label for="inputstu_birth" style="font-weight:bold;">出生日期</label>
+      <input v-model="student.stu_birth" type="date" class="form-control-plaintext" readonly="readonly" id="birth"  >
+    </div>
+    <div class="form-group col-2">
+      <label for="inputnation" style="font-weight:bold;">民族</label>
+      <input v-model="student.stu_nation" type="text" class="form-control-plaintext" id="inputgender" readonly="readonly" placeholder="nation">
+    </div>
+    <div class="form-group col-2 "> 
+      <label for="inputstu_tele" style="font-weight:bold;">联系电话</label>
+      <input v-model="student.stu_telephone" type="text" class="form-control " id="inputstu_tele"  placeholder="telephone">
+    </div>
+
+  </div>	
+
+<!-- 政治面貌、学院、专业--> 
+  <div class="form-row" >
+    <div class="form-group col-2">
+      <label for="inputacademy" style="font-weight:bold;">学院</label>
+      <input v-model="student.stu_xueyuan" type="text" class="form-control-plaintext" id="inputacademy" readonly="readonly" placeholder="academy">
+    </div><div class="form-group col-2">
+      <label for="inputprofession" style="font-weight:bold;">专业</label>
+      <input v-model="student.stu_zhuanye" type="text" class="form-control-plaintext" id="inputprofession" readonly="readonly" placeholder="profession">
+    </div>
+    <div class="form-group col-2">
+      <label for="inputStatus" style="font-weight:bold;">政治面貌</label>
+      <select v-model="student.stu_state" id="inputStatus" class="form-control">
+        <option selected></option>
+        <option>共青团员</option>
+        <option>共产党员</option>
+        <option>预备党员</option>
+      </select>
+    </div>    
+  </div>
+
+<!-- 家庭住址 -->  
+  <div class="form-group">
+    <label for="inputAddress" style="font-weight:bold;" >家庭住址</label>
+    <input v-model="student.stu_address" type="text" class="form-control" id="inputAddress" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="form-group">
+
+  </div>
+  <button type="submit" class="btn btn-primary">Sign in</button>
+</form>
+
+
+</div>
+
+<!-- 在body结尾之前引入以下js文件。 注意导入顺序不可以随意改变。 -->
+<script src="resources/js/jquery.min.js" ></script>
+<script src="resources/js/bootstrap.bundle.min.js"></script>
+<script src="resources/layer/layer.js" ></script>
+<script src="resources/js/sweetalert.min.js" ></script>
+<script type="text/javascript" src="resources/js/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/my.js"></script>
+
+<script type="text/javascript">
+
+	new Vue({
+		
+		el:'#information',
+		data:{
+			student:{},
+			},
+	
+			methods:{
+				//加载分类信息-start
+				loadStuList(){
+					console.log("加载分类");
+					My.loadData(
+							{	
+								url:'stuList'
+							},
+							
+							(data) => {//处理服务器数据的回调函数
+								this.student=data;
+							}
+								);
+				},		
+				//加载分类信息-end
+			},
+		
+			mounted(){
+				//挂载完成的回调函数
+					
+					//从服务端获取数据
+					console.log ("回调函数 ");
+					this.loadStuList();
+				}	
+		
+		
+		
+	});
+</script>
+</body>
+</html>

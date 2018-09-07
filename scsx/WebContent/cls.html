@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Insert title here</title>
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" >
+<link rel="stylesheet" href="resources/css/font-awesome.min.css" >
+</head>
+<body>
+
+<div id="app" class="container-fluid" style="padding:0 2px 0 2px;">
+	
+	<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">基础信息</li>
+    <li class="breadcrumb-item active" >商品分类</li>
+  </ol>
+</nav>
+	
+	
+	<div class="btn-group" style="margin-bottom:10px;">
+  		<button @click="clsAddTo" type="button" class="btn btn-primary"><i class="fa fa-plus-circle" ></i> 新增</button>
+  		<button @click="clsDelMultiDo" type="button" class="btn btn-danger"><i class ="fa fa-trash"></i> 删除</button>
+	</div>
+
+	<table class="table " >
+
+		<thead>
+			<tr>
+				<th>选择</th>
+				<th>分类编号</th>
+				<th>分类名称</th>
+				<th>分类说明</th>
+				<th>操作</th>
+			</tr>
+					
+		
+		
+		</thead>
+		
+		
+		<tbody>
+			
+			<tr v-for="cls in clsList">
+				<td><input type="checkbox" v-model="cls_ids" :value="cls.cls_id" /></td>
+				<td>{{cls.cls_id}}</td>
+				<td>{{cls.cls_name}}</td>
+				<td>{{cls.cls_remark}}</td>
+				<td>
+					<a href="#" @click="clsUpdTo(cls)">修改</a>
+					<a href="#" @click="clsDelDo(cls)">删除</a> 
+				</td>			
+			</tr>
+		</tbody>	
+	</table>
+	
+	<!-- 增加窗口的内容 -->
+	<div id="cls-win-add" style="display:none;padding:15px;">
+	
+		<form>
+			  <div class="form-group">
+			    <label for="cls-add-name">分类名称</label>
+			    <input v-model="cls.cls_name" type="text" class="form-control" id="cls-add-name" placeholder="请输入分类名称">
+			  </div>
+			  <div class="form-group">
+			    <label for="cls-add-name">分类说明</label>
+			    <input v-model="cls.cls_remark " type="text" class="form-control" id="cls-add-name" placeholder="请输入分类名称">
+			  </div>
+			  <button @click="clsAddDo" type="button" class="btn btn-primary">提交 </button>
+		</form>
+	
+	</div>
+	
+		<!-- 修改窗口的内容 -->
+	<div id="cls-win-upd" style="display:none;padding:15px;">
+	
+		<form>
+		      <div class="form-group">
+			    <label for="cls-upd-id">商品编号 </label>
+	  		    <input v-model="updcls.cls_id" type="text" readonly="readonly" class="form-control" id="cls-upd-id" placeholder="商品编号">
+			  </div>
+			  <div class="form-group">
+			    <label for="cls-upd-name">分类名称</label>
+	  		    <input v-model="updcls.cls_name" type="text" class="form-control" id="cls-upd-name" placeholder="请输入分类名称">
+			  </div>
+			  <div class="form-group">
+			    <label for="cls-upd-name">分类说明</label>
+			    <input v-model="updcls.cls_remark " type="text" class="form-control" id="cls-upd-name" placeholder="请输入分类名称">
+			  </div>
+			  <button @click="clsUpdDo" type="button" class="btn btn-primary">提交 </button>
+		</form>
+	
+	</div>
+	
+	
+	
+	
+</div>
+
+<!-- 在body结尾之前引入以下js文件。 注意导入顺序不可以随意改变。 -->
+<script src="resources/js/jquery.min.js" ></script>
+<script src="resources/js/bootstrap.bundle.min.js"></script>
+<script src="resources/layer/layer.js" ></script>
+<script src="resources/js/sweetalert.min.js" ></script>
+<script type="text/javascript" src="resources/js/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/my.js"></script>
+
+<script type="text/javascript">
+
+
+	new Vue({
+		el:'#app',
+		data:{
+			clsList:[],			
+			dlg:null,	
+			cls:{},//绑定新增窗体
+			cls_ids:[],//绑定复选框
+			updcls:{},//绑定修改窗体
+		},
+		
+		//监视属性变化
+		watch:{
+			
+			//监视cls_ids属性-start  
+			cls_ids(newValue,oldValue){
+				console.log(newValue);
+				
+			}
+			//监视cls_ids属性-end
+			
+		},
+		//定义Vue对象的实例方法
+		methods:{
+			
+			clsAddTo(){
+			this.cls={};
+			this.dlg=My.open({
+					title:'新增商品分类',
+					contentId:'cls-win-add'
+				});				
+			},
+			
+			clsAddDo(){
+				console.log("=====>");
+				
+				My.operate({
+					title:'are you sure？',
+					text:'asdd',
+					url:'clsAddDo',
+					data:this.cls
+				},
+				
+				() => {
+					
+					this.loadClsList();
+					My.close(this.dlg);
+					
+				}
+				
+				);
+				 
+			},
+			
+			
+			//弹出修改窗体-start			
+			clsUpdTo(cls){
+				this.updcls=cls;
+				this.dlg=My.open({
+					title:'修改商品分类',
+					contentId:'cls-win-upd'
+				});
+			},
+			//弹出修改窗体-end
+			
+			//执行修改-start
+			clsUpdDo(){
+				 
+				My.operate({
+					title:'are you sure？',
+					text:'asdd',
+					url:'clsUpdDo',
+					data:this.updcls
+				},
+				
+				() => {
+					
+					this.loadClsList();
+					My.close(this.dlg);
+					
+				}
+				
+				);
+			},
+			//执行修改-end
+		
+			//执行删除-start
+			clsDelDo(cls){
+				 
+				My.operate({
+					title:'are you sure？',
+					text:'asdd',
+					url:'clsDelDo',
+					data:{cls_id:cls.cls_id}
+				},
+				
+				() => {
+					
+					this.loadClsList();
+					My.close(this.dlg);
+					
+				}
+				
+				);
+			},
+			//执行删除-end
+			
+			//执行批量删除-start
+clsDelMultiDo(){
+				
+				
+				//js中 undefined 、 null 、 0 都可以自动转化为假（false）
+				if(!this.cls_ids || this.cls_ids.length==0){
+					swal("请选择数据！", "", "info");
+					return;
+				}
+				
+				
+				
+				My.operate(
+						{
+							title:'您确实要删除这些分类信息吗？',
+							text:'如果一旦删除，则无法恢复！',
+							url:'clsDelMultiDo',
+							data:{cls_ids:this.cls_ids}
+						},
+						
+						() => {
+							this.loadClsList();
+							My.close(this.dlg);
+							this.cls_ids=[];//清除数据
+						}
+				
+				);
+			},
+			//执行批量删除-end
+		
+		//加载分类信息-start
+		loadClsList(){
+			
+			My.loadData(
+					{
+						url:'clsList'
+					},
+					
+					(data) => {//处理服务器数据的回调函数
+						this.clsList=data;
+					}
+		);
+			//加载分类信息-end
+			
+		},
+		
+	},	 
+		mounted(){
+		//挂载完成的回调函数
+			
+			//从服务端获取数据
+			
+			this.loadClsList();
+		}
+		
+	});
+
+</script>
+
+</body>
+</html>
