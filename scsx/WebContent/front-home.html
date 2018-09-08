@@ -148,7 +148,7 @@ background-attachment:fixed;"></body>
   <div class="col-8">
   	<div class="my-curr-user dropdown">
 	
-		<span class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;" >当前用户：XXX</span>
+		<span v-model="student.stu_name" class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;" >当前用户：{{student.stu_name}}</span>
 	
 		<div class="dropdown-menu" style="font-size: 10px;" >
 		   <a @click="logout" class="dropdown-item" href="#">安全退出</a>
@@ -237,7 +237,7 @@ background-attachment:fixed;"></body>
 	new Vue({
 		el:'#app',
 		data:{
-		
+			student:{},
 			 
 		},
 		methods:{
@@ -249,8 +249,36 @@ background-attachment:fixed;"></body>
 					window.location.href="login.html";
 				},1000);	
 				});
-				}
+				},
+				
+				//加载分类信息-start
+				loadStuList(){
+					console.log("加载分类");
+					My.loadData(
+							{	
+								url:'stuList'
+							},
+							
+							(data) => {//处理服务器数据的回调函数
+								this.student=data;
+								console.log ("回调1");		
+							}
+								);
+				},		
+				//加载分类信息-end
+				
 					
+			},
+			
+			
+			mounted(){
+				//挂载完成的回调函数
+				
+				//从服务端获取数据
+				console.log ("回调函数 ");
+				this.loadStuList();
+				
+				
 			}
 		
 		

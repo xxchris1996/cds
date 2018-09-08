@@ -80,7 +80,7 @@
   <div class="form-group">
 
   </div>
-  <button type="submit" class="btn btn-primary">Sign in</button>
+  <button  @click="stuUpdDo" type="button" class="btn btn-primary">Sign in</button>
 </form>
 
 
@@ -118,6 +118,30 @@
 								);
 				},		
 				//加载分类信息-end
+				
+				//执行修改-start
+				stuUpdDo(){
+					 
+					My.operate({
+						title:'are you sure？',
+						text:'asdd',
+						url:'stuUpdDo',
+						data:this.student,
+					
+					},
+					
+				
+					
+					() => {
+						console.log ("1111");
+						this.loadStuList();
+						console.log ("2222");	
+					}
+					
+					);
+				},
+				//执行修改-end
+				
 			},
 		
 			mounted(){
