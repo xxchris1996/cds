@@ -5,25 +5,13 @@ public class students {
 		String stu_xuehao;
 		String stu_name;
 		String stu_xingbie;
-		String xueyuan;
-		String zhuanye;
+		String stu_xueyuan;
+		String stu_zhuanye;
 		String stu_birth;
 		String stu_state;
 		String stu_address;
+		String stu_nation;
 		String stu_telephone;
-		private String stu_pwd;
-		public String getStu_pwd() {
-			return stu_pwd;
-		}
-		public void setStu_pwd(String stu_pwd) {
-			this.stu_pwd = stu_pwd;
-		}
-		public String getStu_telephone() {
-			return stu_telephone;
-		}
-		public void setStu_telephone(String stu_telephone) {
-			this.stu_telephone = stu_telephone;
-		}
 		public String getStu_xuehao() {
 			return stu_xuehao;
 		}
@@ -42,17 +30,17 @@ public class students {
 		public void setStu_xingbie(String stu_xingbie) {
 			this.stu_xingbie = stu_xingbie;
 		}
-		public String getXueyuan() {
-			return xueyuan;
+		public String getStu_xueyuan() {
+			return stu_xueyuan;
 		}
-		public void setXueyuan(String xueyuan) {
-			this.xueyuan = xueyuan;
+		public void setStu_xueyuan(String stu_xueyuan) {
+			this.stu_xueyuan = stu_xueyuan;
 		}
-		public String getZhuanye() {
-			return zhuanye;
+		public String getStu_zhuanye() {
+			return stu_zhuanye;
 		}
-		public void setZhuanye(String zhuanye) {
-			this.zhuanye = zhuanye;
+		public void setStu_zhuanye(String stu_zhuanye) {
+			this.stu_zhuanye = stu_zhuanye;
 		}
 		public String getStu_birth() {
 			return stu_birth;
@@ -72,9 +60,17 @@ public class students {
 		public void setStu_address(String stu_address) {
 			this.stu_address = stu_address;
 		}
-		
-		
-		
-		
-		
+		public String getStu_nation() {
+			return stu_nation;
+		}
+		public void setStu_nation(String stu_nation) {
+			this.stu_nation = stu_nation;
+		}
+		public String getStu_telephone() {
+			return stu_telephone;
+		}
+		public void setStu_telephone(String stu_telephone) {
+			this.stu_telephone = stu_telephone;
+		}
+				
 }

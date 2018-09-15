@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Insert title here</title>
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" >
+<link rel="stylesheet" href="resources/css/font-awesome.min.css" >
+</head>
+<body>
+
+<div id="cxs_information" class="container-fluid" style="padding:0 2px 0 2px;">
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">学生管理</li>
+    <li class="breadcrumb-item active" >学生成绩</li>
+  </ol>
+</nav>
+<table class="table " >
+
+		<thead>
+			<tr>
+	 			<th>课程编码</th>
+	 			<th>课程名称</th>
+	 			<th>课程性质</th>
+	 			<th>课程学分</th>
+	 			<th>课程成绩</th>
+			</tr>
+					
+		
+		
+		</thead>
+		
+		
+			<tbody>
+	 	
+	 		<tr v-for="course in clsList">
+	 			<td>{{ course.cus_id}}</td>
+	 			<td>{{ course.cus_name}}</td>
+	 			<td>{{ course.cus_xingzhi}}</td>
+	 			<td>{{ course.cus_score}}</td>
+	 			<td>
+	 				<a href="#" @click="cus_details(course)"  >详细情况</a>
+	 			</td>
+	 		</tr>
+		</tbody>	
+	</table>
+<!-- 详细信息窗口 -->	
+<div id="cus-detail" style="display:none;padding:15px;z-index:11;">	
+<form style="padding:0 20px 0 20px;">
+<table class="table " >
+
+		<thead>
+			<tr>
+				<th>学生</th>
+				<th>课程成绩</th>
+			</tr>		
+		</thead>		
+		<tbody>		
+			<tr v-for="(cxs,i) in cxscusList">
+				<td>{{cxs.stu_xuehao}}</td>	
+				<td><input v-model="grades[i]" /></td>					
+			</tr>
+		</tbody>	
+	</table>
+	<button  @click="gradeUpdDo" type="button" class="btn btn-primary" :disabled = "disabled" >确认修改</button>
+
+
+</form>
+</div>	
+</div>	
+	
+	
+	
+	
+	
+<!-- 在body结尾之前引入以下js文件。 注意导入顺序不可以随意改变。 -->
+<script src="resources/js/jquery.min.js" ></script>
+<script src="resources/js/bootstrap.bundle.min.js"></script>
+<script src="resources/layer/layer.js" ></script>
+<script src="resources/js/sweetalert.min.js" ></script>
+<script type="text/javascript" src="resources/js/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/my.js"></script>
+<script type="text/javascript">
+		new Vue({
+			el:'#cxs_information',
+			data:{
+				clsList:[],	
+				cxscusList:[],
+				dlg:null,	
+				course:{},//绑定新增窗体
+				stu_xuehao:[],//绑定复选框
+				cusdetail:{},//绑定修改窗体
+				disabled:false,
+				
+				grades:[],//成绩
+				stu_xhs:[],
+				
+				
+				
+			},
+			methods:{
+				//加载学生信息-start
+				loadclsList(){
+					
+					My.loadData(
+							{
+								url:'clsList'
+							},
+							
+							(data) => {//处理服务器数据的回调函数
+								this.clsList=data;
+							}
+				);
+						},
+				//加载学生信息-end
+				
+	
+				//加载成绩信息-start
+				loadcxscusList(){		
+					My.loadData(
+							{
+								url:'cxscusList',
+								data:this.cusdetail
+							},									
+							(data) => {//处理服务器数据的回调函数
+								this.cxscusList=data;
+								for(var i=0;i<data.length;i++){
+									this.stu_xhs.push(data[i].stu_xuehao);
+								}
+							});
+					},
+						//加载成绩信息-end
+									
+					//弹出详细信息-start			
+					cus_details(course){
+						this.cusdetail=course;
+						this.dlg=My.open({
+							title:'成绩详情',
+							contentId:'cus-detail'
+						});
+						this.loadcxscusList();
+					},
+					//弹出详细信息-end
+					
+					//执行修改-start
+					gradeUpdDo(){
+						 
+						My.operate({
+							title:'您确定要修改这些数据吗？',
+							text:' ',
+							url:'gradeUpdDo',
+							data:{
+								cus_id:this.cusdetail.cus_id,
+								stu_xhs:this.stu_xhs,
+								grades:this.grades
+							},
+				
+						
+						},
+						
+					
+						
+						() => {
+							console.log ("1111");
+							this.loadcxscusList();
+							console.log ("2222");
+							this.disabled=true;
+						});
+						this.loadclsList();
+					},
+					//执行修改-end
+					
+			},
+			mounted(){
+				//挂载完成的回调函数
+					
+					//从服务端获取数据
+					
+					this.loadclsList();
+				}
+				
+			});
+
+
+
+
+</script>
+</body>
+</html>

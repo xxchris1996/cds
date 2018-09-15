@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Insert title here</title>
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" >
+<link rel="stylesheet" href="resources/css/font-awesome.min.css" >
+</head>
+<body>
+<div id = "app">
+<div class="container-fluid" style="padding:0 2px 0 2px;">
+	
+	<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">学生管理</li>
+    <li class="breadcrumb-item active" >学生信息</li>
+  </ol>
+</nav>
+	
+	
+	<div class="btn-group" style="margin-bottom:10px;">
+  		<button @click="stuAddTo" type="button" class="btn btn-primary"><i class="fa fa-plus-circle" ></i> 新增</button>
+  		<button @click="stuDelMultiDo" type="button" class="btn btn-danger"><i class ="fa fa-trash"></i> 删除</button>
+	</div>
+
+	<table class="table " >
+
+		<thead>
+			<tr>
+				<th>选择</th>
+				<th>学号</th>
+				<th>姓名</th>
+				<th>性别</th>
+				<th>民族</th>
+				<th>政治面貌</th>
+				<th>生日</th>
+				<th>学院</th>
+				<th>专业</th>
+				<th>电话</th>
+				<th>地址</th>
+				<th>操作</th>
+			</tr>
+					
+		
+		
+		</thead>
+		
+		
+		<tbody>
+			
+			<tr v-for="student in studentList">
+				<td><input type="checkbox" v-model="stu_xuehao" :value="student.stu_xuehao" /></td>
+				<td>{{student.stu_xuehao}}</td>
+				<td>{{student.stu_name}}</td>
+				<td>{{student.stu_xingbie}}</td>
+				<td>{{student.stu_nation}}</td>
+				<td>{{student.stu_state}}</td>
+				<td>{{student.stu_birth}}</td>
+				<td>{{student.stu_xueyuan}}</td>
+				<td>{{student.stu_zhuanye}}</td>
+				<td>{{student.stu_telephone}}</td>
+				<td>{{student.stu_address}}</td>		
+				<td>
+					<a href="#" @click="stuUpdTo(student)">修改</a>
+					<a href="#" @click="stu_pwdreset(student)">密码重置</a> 
+				</td>			
+			</tr>
+		</tbody>	
+	</table>
+	
+	<!-- 修改窗口的内容 -->
+	<div id="stu-upd" style="display:none;padding:15px;z-index:11;">
+	
+		<form style="padding:0 20px 0 20px;">
+<!-- 姓名、性别、学号-->
+  <div class="form-row" >
+      <div class="form-group col-2 "> 
+      <label for="inputstu_num" style="font-weight:bold;">学号</label>
+      <input v-model="stucls.stu_xuehao" type="number" class="form-control-plaintext" id="inputstu_num" readonly="readonly"   placeholder="NO.">
+    </div>
+  
+    <div class="form-group col-2 "> 
+      <label for="inputstu_name" style="font-weight:bold;">姓名</label>
+      <input v-model="stucls.stu_name" type="text" class="form-control-plaintext" id="inputstu_name"   placeholder="name">
+    </div>
+    <div class="form-group col-2">
+     <label for="inputstu_gender" style="font-weight:bold;">性别</label>
+      <select v-model="stucls.stu_xingbie" id="inputstu_gender" class="form-control">
+        <option selected>男</option>
+        <option>女</option>
+        </select>
+      </div>
+
+  </div>
+<!-- 生日、民族、籍贯、电话 --> 
+  <div class="form-row" >
+    <div class="form-group col-2 "> 
+      <label for="inputstu_birth" style="font-weight:bold;">出生日期</label>
+      <input v-model="stucls.stu_birth" type="date" class="form-control-plaintext"   id="birth"  >
+    </div>
+    <div class="form-group col-2">
+      <label for="inputnation" style="font-weight:bold;">民族</label>
+      <input v-model="stucls.stu_nation" type="text" class="form-control-plaintext" id="inputgender"   placeholder="nation">
+    </div>
+    <div class="form-group col-2 "> 
+      <label for="inputstu_tele" style="font-weight:bold;">联系电话</label>
+      <input v-model="stucls.stu_telephone" type="text" class="form-control " id="inputstu_tele"  placeholder="telephone">
+    </div>
+
+  </div>	
+
+<!-- 政治面貌、学院、专业--> 
+  <div class="form-row" >
+    <div class="form-group col-2">
+      <label for="inputacademy" style="font-weight:bold;">学院</label>
+      <input v-model="stucls.stu_xueyuan" type="text" class="form-control" id="inputacademy"   placeholder="academy">
+    </div><div class="form-group col-2">
+      <label for="inputprofession" style="font-weight:bold;">专业</label>
+      <input v-model="stucls.stu_zhuanye" type="text" class="form-control" id="inputprofession"   placeholder="profession">
+    </div>
+    <div class="form-group col-2">
+      <label for="inputStatus" style="font-weight:bold;">政治面貌</label>
+      <select v-model="stucls.stu_state" id="inputStatus" class="form-control">
+        <option selected></option>
+        <option>共青团员</option>
+        <option>共产党员</option>
+        <option>预备党员</option>
+      </select>
+    </div>    
+  </div>
+
+<!-- 家庭住址 -->  
+  <div class="form-group">
+    <label for="inputAddress" style="font-weight:bold;" >家庭住址</label>
+    <input v-model="stucls.stu_address" type="text" class="form-control" id="inputAddress" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="form-group">
+
+  </div>
+  <button  @click="stuUpdDo" type="button" class="btn btn-primary">确认</button>
+  
+</form>
+
+	
+</div>	
+</div>	
+	<!-- 增加窗口的内容 -->
+	<div id="stu-add" style="display:none;padding:15px;">
+	
+		<form style="padding:0 20px 0 20px;">
+<!-- 姓名、性别、学号-->
+  <div class="form-row" >
+    <div class="form-group col-2 "> 
+      <label for="inputstu_num" style="font-weight:bold;">学号</label>
+      <input v-model="students.stu_xuehao" type="number" class="form-control-plaintext" id="inputstu_num"   placeholder="NO.">
+    </div>
+
+    <div class="form-group col-2 "> 
+      <label for="inputstu_name" style="font-weight:bold;">姓名</label>
+      <input v-model="students.stu_name" type="text" class="form-control-plaintext" id="inputstu_name"   placeholder="name">
+    </div>
+    <div class="form-group col-2">
+     <label for="inputstu_gender" style="font-weight:bold;">性别</label>
+      <select v-model="students.stu_xingbie" id="inputstu_gender" class="form-control">
+        <option selected>男</option>
+        <option>女</option>
+        </select>
+      </div>
+
+  </div>
+<!-- 生日、民族、籍贯、电话 --> 
+  <div class="form-row" >
+    <div class="form-group col-2 "> 
+      <label for="inputstu_birth" style="font-weight:bold;">出生日期</label>
+      <input v-model="students.stu_birth" type="date" class="form-control-plaintext"   id="birth"  >
+    </div>
+    <div class="form-group col-2">
+      <label for="inputnation" style="font-weight:bold;">民族</label>
+      <input v-model="students.stu_nation" type="text" class="form-control-plaintext" id="inputgender"   placeholder="nation">
+    </div>
+    <div class="form-group col-2 "> 
+      <label for="inputstu_tele" style="font-weight:bold;">联系电话</label>
+      <input v-model="students.stu_telephone" type="text" class="form-control " id="inputstu_tele"  placeholder="telephone">
+    </div>
+
+  </div>	
+
+<!-- 政治面貌、学院、专业--> 
+  <div class="form-row" >
+    <div class="form-group col-2">
+      <label for="inputacademy" style="font-weight:bold;">学院</label>
+      <input v-model="students.stu_xueyuan" type="text" class="form-control" id="inputacademy"   placeholder="academy">
+    </div><div class="form-group col-2">
+      <label for="inputprofession" style="font-weight:bold;">专业</label>
+      <input v-model="students.stu_zhuanye" type="text" class="form-control" id="inputprofession"   placeholder="profession">
+    </div>
+    <div class="form-group col-2">
+      <label for="inputStatus" style="font-weight:bold;">政治面貌</label>
+      <select v-model="students.stu_state" id="inputStatus" class="form-control">
+        <option selected></option>
+        <option>共青团员</option>
+        <option>共产党员</option>
+        <option>预备党员</option>
+      </select>
+    </div>    
+  </div>
+
+<!-- 家庭住址 -->  
+  <div class="form-group">
+    <label for="inputAddress" style="font-weight:bold;" >家庭住址</label>
+    <input v-model="students.stu_address" type="text" class="form-control" id="inputAddress" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="form-group">
+
+  </div>
+  <button  @click="stuAddDo" type="button" class="btn btn-primary">确认</button>
+  
+</form>
+	
+	</div>
+	
+</div>
+
+<!-- 在body结尾之前引入以下js文件。 注意导入顺序不可以随意改变。 -->
+<script src="resources/js/jquery.min.js" ></script>
+<script src="resources/js/bootstrap.bundle.min.js"></script>
+<script src="resources/layer/layer.js" ></script>
+<script src="resources/js/sweetalert.min.js" ></script>
+<script type="text/javascript" src="resources/js/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/my.js"></script>
+
+<script type="text/javascript">
+
+
+	new Vue({
+		el:'#app',
+		data:{
+			studentList:[],			
+			dlg:null,	
+			students:{},//绑定新增窗体
+			stu_xuehao:[],//绑定复选框
+			stucls:{},//绑定修改窗体
+		},
+		
+		//定义Vue对象的实例方法
+		methods:{
+			//新增信息
+			stuAddTo(){
+				this.students={};
+				console.log("=====>");
+				this.dlg=My.open({
+						title:'新增学生信息',
+						contentId:'stu-add'
+					});				
+				},
+				
+				stuAddDo(){
+					console.log("=====>");
+					
+					My.operate({
+						title:'are you sure？',
+						text:'asdd',
+						url:'stuAddDo',
+						data:this.students
+					},
+					
+					() => {
+						
+						this.loadstudentList();
+						My.close(this.dlg);
+						
+					}
+					
+					);
+					 
+				},
+			//新增信息
+			
+				//弹出修改窗体-start			
+				stuUpdTo(student){
+					this.stucls=student;
+					this.dlg=My.open({
+						title:'修改商品分类',
+						contentId:'stu-upd'
+					});
+				},
+				//弹出修改窗体-end
+				
+				//执行修改-start
+				stuUpdDo(){
+					 
+					My.operate({
+						title:'are you sure？',
+						text:'asdd',
+						url:'allinfo_stuUpdDo',
+						data:this.stucls
+					},
+					
+					() => {
+						
+						this.loadstudentList();
+						My.close(this.dlg);
+						
+					}
+					
+					);
+				},
+				//执行修改-end
+				
+				//执行批量删除-start
+				stuDelMultiDo(){				
+				//js中 undefined 、 null 、 0 都可以自动转化为假（false）
+				if(!this.stu_xuehao || this.stu_xuehao.length==0){
+					swal("请选择数据！", "", "info");
+					return;
+				}
+				
+				
+				
+				My.operate(
+						{
+							title:'您确实要删除这些分类信息吗？',
+							text:'如果一旦删除，则无法恢复！',
+							url:'stuDelMultiDo',
+							data:{stu_xuehao:this.stu_xuehao}
+						},
+						
+						() => {
+							this.loadstudentList();
+
+						}
+				
+				);
+			},
+			//执行批量删除-end
+		
+			
+		//加载分类信息-start
+		loadstudentList(){
+			
+			My.loadData(
+					{
+						url:'studentList'
+					},
+					
+					(data) => {//处理服务器数据的回调函数
+						this.studentList=data;
+					}
+		);
+				},
+			//加载分类信息-end
+					
+			//密码重置-start
+			stu_pwdreset(students){
+					this.students = students;
+				My.operate({
+					title:'are you sure？',
+					text:'asdd',
+					url:'stu_pwdreset',
+					data:this.students
+				},
+				
+				() => {
+					
+					this.loadstudentList();
+					
+				}
+				
+				);
+			},
+			//密码重置-end
+			
+		
+	},	 
+		mounted(){
+		//挂载完成的回调函数
+			
+			//从服务端获取数据
+			
+			this.loadstudentList();
+		}
+		
+	});
+
+</script>
+
+</body>
+</html>

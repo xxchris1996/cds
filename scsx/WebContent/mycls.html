@@ -13,25 +13,26 @@
 	
 	<nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">课程选择</li>
-    <li class="breadcrumb-item active" >我的课程</li>
+    <li class="breadcrumb-item">个人课表</li>
+    <li class="breadcrumb-item active" >个人成绩</li>
   </ol>
 </nav>
 	
 	
 	<div class="btn-group" style="margin-bottom:10px;">
-  		<button @click="clsAddMultiDo" type="button" class="btn btn-danger"><i class ="fa fa-plus-circle"></i> 确定</button>
+	
 	</div>
 
 	<table class="table " >
 
 		<thead>
 			<tr>
-			   <th>课程选择</th>
+			   
 	 			<th>课程编码</th>
 	 			<th>课程名称</th>
 	 			<th>课程性质</th>
 	 			<th>课程学分</th>
+	 			<th>操作</th>
 			</tr>
 					
 		
@@ -41,13 +42,15 @@
 		
 			<tbody>
 	 	
-	 		<tr v-for="course in clsList">
-	 			<td><input type="checkbox" v-model="cls_ids" :value="course.cus_id" /></td>
-	 			<td>{{ course.cus_id}}</td>
-	 			<td>{{ course.cus_name}}</td>
-	 			<td>{{ course.cus_xingzhi}}</td>
-	 			<td>{{ course.cus_score}}</td>
-	 			
+	 		<tr v-for="cxs in cxsList">
+	 		
+	 			<td>{{ cxs.cus_id}}</td>
+	 			<td>{{ cxs.cus_name}}</td>
+	 			<td>{{ cxs.cus_xingzhi}}</td>
+	 			<td>{{ cxs.cus_score}}</td>
+	 			<td>
+	 				<a href="#" @click="clsDelDo(cxs)" >删除</a>
+	 			</td>
 	 		</tr>
 	 		
 	 		
@@ -62,19 +65,19 @@
 		<form>
 		  <div class="form-group">
 		    <label for="cls-add-id">课程编号</label>
-		    <input v-model="course.cus_id" type="text" class="form-control" id="cls-add-id" placeholder="请输入分类名称">		   
+		    <input v-model="cxs.cus_id" type="text" class="form-control" id="cls-add-id" placeholder="请输入分类名称">		   
 		  </div>
 		  <div class="form-group">
 		    <label for="cls-add-name">课程名称</label>
-		    <input v-model="course.cus_name" type="text" class="form-control" id="cls-add-name" placeholder="请输入分类名称">		   
+		    <input v-model="cxs.cus_name" type="text" class="form-control" id="cls-add-name" placeholder="请输入分类名称">		   
 		  </div>
 		  <div class="form-group">
 		    <label for="cls-add-remark">课程性质</label>
-		    <input v-model="course.cus_xingzhi" type="text" class="form-control" id="cls-add-remark" placeholder="请输入分类名称">		   
+		    <input v-model="cxs.cus_xingzhi" type="text" class="form-control" id="cls-add-remark" placeholder="请输入分类名称">		   
 		  </div>
 		  <div class="form-group">
 		    <label for="cls-add-score">课程学分</label>
-		    <input v-model="course.cus_score" type="text" class="form-control" id="cls-add-score" placeholder="请输入分类名称">		   
+		    <input v-model="cxs.cus_score" type="text" class="form-control" id="cls-add-score" placeholder="请输入分类名称">		   
 		  </div>
 		  
 		  <button @click="clsAddDo" type="button" class="btn btn-primary">提交</button>
@@ -123,10 +126,10 @@
 	new Vue({
 		el:'#app',
 		data:{
-			clsList:[],
+			cxsList:[],
 			dlg:null,
-			course:{},//绑定新增窗体
-			cls_ids:[],//绑定复选框
+			cxs:{},//绑定新增窗体
+			cxs_ids:[],//绑定复选框
 			updcls:{},//绑定修改窗体
 			
 		},
@@ -135,7 +138,7 @@
 		watch:{
 			
 			//监视cls_ids属性-start
-			cls_ids(newValue,oldValue){
+			cxs_ids(newValue,oldValue){
 				console.log(newValue);
 			}
 			//监视cls_ids属性-end
@@ -175,7 +178,7 @@
 			
 			//弹出修改窗体-start
 			clsUpdTo(course){
-				this.updcls=course;
+				this.updcxs=course;
 				this.dlg=My.open({
 					title:'修改商品分类',
 					contentId:'cls-win-upd'					
@@ -195,7 +198,7 @@
 						},
 						
 						() => {
-							this.loadClsList();
+							this.loadCxsList();
 							My.close(this.dlg);
 						}
 				
@@ -204,13 +207,13 @@
 			//执行修改-end
 			
 			//执行删除-start
-			clsDelDo(course){
+			clsDelDo(cxs){
 				My.operate(
 						{
-							title:'您确实要选择该课程吗？',
-							text:'如果一旦选中，则无法恢复！',
+							title:'您确实要删除该分类信息吗？',
+							text:'如果一旦删除，则无法恢复！',
 							url:'clsDelDo',
-							data:{cus_id:course.cus_id}
+							data:{cus_id:cxs.cus_id}
 						},
 						
 						() => {
@@ -223,8 +226,8 @@
 			//执行删除-end
 			
 
-			//执行批量选择-start
-			clsAddMultiDo(){
+			//执行批量删除-start
+			clsDelMultiDo(){
 				
 				
 				//js中 undefined 、 null 、 0 都可以自动转化为假（false）
@@ -238,8 +241,8 @@
 				My.operate(
 						{
 							title:'您确实要选择这些课吗？',
-							text:'如果一旦选中，则可在“个人课表”处修改！',
-							url:'clsAddMultiDo',
+							text:'如果一旦删除，则无法恢复！',
+							url:'clsDelMultiDo',
 							data:{cls_ids:this.cls_ids}
 						},
 						
@@ -251,18 +254,18 @@
 				
 				);
 			},
-			//执行批量增加-end
+			//执行批量删除-end
 			
 			
 			//加载分类信息-start
 			loadClsList(){
 				My.loadData(
 						{
-							url:'clsList'
+							url:'cxsList'
 						},
 						
 						(data) => { //处理服务器数据的回调函数
-							this.clsList=data;
+							this.cxsList=data;
 						}
 				);
 			},//加载分类信息-end

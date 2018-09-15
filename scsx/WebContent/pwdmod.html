@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Insert title here</title>
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" >
+<link rel="stylesheet" href="resources/css/font-awesome.min.css" >
+</head>
+<body>
+
+<div id="passwordmodify" class="container-fluid" style="padding:0 2px 0 2px;">
+<form>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">信息管理</li>
+    <li class="breadcrumb-item active" >密码修改</li>
+  </ol>
+</nav>
+
+ 
+<div class="col-sm">
+  <div class="input-group input-group-sm mb-3" style="padding-left:30%;padding-right:30%;padding-top:10%;">  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">新密码：</span>
+  </div>
+  <input id="newpwd" type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+</div>
+</div>
+
+<div class="col-sm">
+  <div class="input-group input-group-sm mb-3" style="padding-left:30%;padding-right:30%;">  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">确认新密码：</span>
+  </div>
+  <input v-model="users.u_pwd" id="conpwd" type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+</div>
+</div>
+<div class ="row align-items-center">
+<button @click="pwdmodDo" type="button" class="btn btn-primary btn-sm" style="margin-left:48%">确认修改</button>
+</form>
+</div>
+
+
+<!-- 在body结尾之前引入以下js文件。 注意导入顺序不可以随意改变。 -->
+<script src="resources/js/jquery.min.js" ></script>
+<script src="resources/js/bootstrap.bundle.min.js"></script>
+<script src="resources/layer/layer.js" ></script>
+<script src="resources/js/sweetalert.min.js" ></script>
+<script type="text/javascript" src="resources/js/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/my.js"></script>
+
+<script type="text/javascript">
+
+new Vue({
+	
+	el:'#passwordmodify',
+	data:{
+		users:{},
+		},
+
+		methods:{
+			
+			//加载分类信息-end
+			//执行修改-start
+			pwdmodDo(){
+				//
+			//	this.loadStuList();
+				var inputValue1 = document.getElementById("newpwd").value;
+				console.log(inputValue1);
+				var inputValue2 = document.getElementById("conpwd").value;
+				console.log(inputValue2);
+				
+				if((inputValue1 == "") || (inputValue2 == "")){
+					
+					swal({
+						 title: "密码不能为空！",											 
+						 icon: "error",
+						 button: "确定"
+					});
+				}
+				else if((inputValue1 == inputValue2)){
+				My.operate({
+					title:'您确定要修改这些数据吗？',
+					text:' ',
+					url:'pwdmodDo',
+					data:this.users,
+				
+				},
+				(result) => {
+					
+					setTimeout(
+						()=>{
+							window.location.href='home.html';
+						},   100	)				
+			});
+			//执行修改-end
+		} 
+				else{
+					swal({
+						 title: "输入密码不一致！",											 
+						 icon: "error",
+						 button: "确定"
+					});
+				//
+			};
+			
+			
+			},	
+		},
+	
+		mounted(){
+			
+			//挂载完成的回调函数
+			
+			//从服务端获取数据
+			console.log ("回调函数 ");
+			
+	
+			}		
+});
+</script>
+</body>
+</html>

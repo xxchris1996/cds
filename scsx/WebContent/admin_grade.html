@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Insert title here</title>
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" >
+<link rel="stylesheet" href="resources/css/font-awesome.min.css" >
+</head>
+<body>
+
+<div id="admin_grade" class="container-fluid" style="padding:0 2px 0 2px;">
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">学生管理</li>
+    <li class="breadcrumb-item active" >学生成绩</li>
+  </ol>
+</nav>
+
+	<table class="table " >
+
+		<thead>
+			<tr>
+				<th>学院</th>
+				<th>专业</th>
+				<th>学号</th>
+				<th>姓名</th>
+				<th>详细情况</th>
+			</tr>
+					
+		
+		
+		</thead>
+		
+		
+		<tbody>
+			
+			<tr v-for="student in studentList">
+				<td>{{student.stu_xueyuan}}</td>
+				<td>{{student.stu_zhuanye}}</td>
+				<td>{{student.stu_xuehao}}</td>
+				<td>{{student.stu_name}}</td>
+				<td>
+					<a href="#" @click="stu_details(student)">详细情况</a>
+				</td>			
+			</tr>
+		</tbody>	
+	</table>
+<!-- 详细信息窗口 -->	
+<div id="stu-detail" style="display:none;padding:15px;z-index:11;">	
+<form style="padding:0 20px 0 20px;">
+<table class="table " >
+
+		<thead>
+			<tr>
+				<th>学生学号</th>
+				<th>课程成绩</th>
+			</tr>		
+		</thead>		
+		<tbody>		
+			<tr v-for="cxs in cxsList">
+				<td>{{cxs.stu_xuehao}}</td>	
+				<td>{{cxs.cus_grade}}</td>					
+			</tr>
+		</tbody>	
+	</table>
+
+
+
+</form>
+</div>	
+</div>	
+	
+	
+	
+	
+	
+<!-- 在body结尾之前引入以下js文件。 注意导入顺序不可以随意改变。 -->
+<script src="resources/js/jquery.min.js" ></script>
+<script src="resources/js/bootstrap.bundle.min.js"></script>
+<script src="resources/layer/layer.js" ></script>
+<script src="resources/js/sweetalert.min.js" ></script>
+<script type="text/javascript" src="resources/js/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/my.js"></script>
+<script type="text/javascript">
+		new Vue({
+			el:'#admin_grade',
+			data:{
+				studentList:[],	
+				cxsList:[],
+				dlg:null,	
+				students:{},//绑定新增窗体
+				stu_xuehao:[],//绑定复选框
+				studetail:{},//绑定修改窗体
+			},
+			methods:{
+				//加载学生信息-start
+				loadstudentList(){
+					
+					My.loadData(
+							{
+								url:'studentList'
+							},
+							
+							(data) => {//处理服务器数据的回调函数
+								this.studentList=data;
+							}
+				);
+						},
+				//加载学生信息-end
+				
+	
+				//加载成绩信息-start
+				loadcxsList(){		
+					My.loadData(
+							{
+								url:'cxsgradeList',
+								data:this.studetail
+							},									
+							(data) => {//处理服务器数据的回调函数
+								this.cxsList=data;
+							});
+					},
+						//加载成绩信息-end
+									
+					//弹出详细信息-start			
+					stu_details(student){
+						this.studetail=student;
+						this.dlg=My.open({
+							title:'成绩详情',
+							contentId:'stu-detail'
+						});
+						this.loadcxsList();
+					},
+					//弹出详细信息-end
+			},
+			mounted(){
+				//挂载完成的回调函数
+					
+					//从服务端获取数据
+					
+					this.loadstudentList();
+				}
+				
+			});
+
+
+
+
+</script>
+</body>
+</html>

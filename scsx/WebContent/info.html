@@ -13,8 +13,8 @@
 
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">安全管理</li>
-    <li class="breadcrumb-item active" >用户管理</li>
+    <li class="breadcrumb-item">信息管理</li>
+    <li class="breadcrumb-item active" >个人信息</li>
   </ol>
 </nav>
 
@@ -80,7 +80,7 @@
   <div class="form-group">
 
   </div>
-  <button  @click="stuUpdDo" type="button" class="btn btn-primary">Sign in</button>
+  <button  @click="stuUpdDo" type="button" class="btn btn-primary" :disabled = "disabled" >修改</button>
 </form>
 
 
@@ -101,7 +101,8 @@
 		el:'#information',
 		data:{
 			student:{},
-			},
+			disabled:false,
+		},
 	
 			methods:{
 				//加载分类信息-start
@@ -123,10 +124,11 @@
 				stuUpdDo(){
 					 
 					My.operate({
-						title:'are you sure？',
-						text:'asdd',
+						title:'您确定要修改这些数据吗？',
+						text:' ',
 						url:'stuUpdDo',
 						data:this.student,
+			
 					
 					},
 					
@@ -135,10 +137,9 @@
 					() => {
 						console.log ("1111");
 						this.loadStuList();
-						console.log ("2222");	
-					}
-					
-					);
+						console.log ("2222");
+						this.disabled=true;
+					});
 				},
 				//执行修改-end
 				
@@ -152,6 +153,7 @@
 					this.loadStuList();
 				}	
 		
+			
 		
 		
 	});

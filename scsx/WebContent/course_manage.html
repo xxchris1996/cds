@@ -14,24 +14,24 @@
 	<nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item">课程选择</li>
-    <li class="breadcrumb-item active" >我的课程</li>
+    <li class="breadcrumb-item active" >课程设置</li>
   </ol>
 </nav>
 	
 	
 	<div class="btn-group" style="margin-bottom:10px;">
-  		<button @click="clsAddMultiDo" type="button" class="btn btn-danger"><i class ="fa fa-plus-circle"></i> 确定</button>
+  		<button @click="clsAddTo" type="button" class="btn btn-primary"><i class ="fa fa-plus-circle"></i> 增加</button>
 	</div>
 
 	<table class="table " >
 
 		<thead>
 			<tr>
-			   <th>课程选择</th>
 	 			<th>课程编码</th>
 	 			<th>课程名称</th>
 	 			<th>课程性质</th>
 	 			<th>课程学分</th>
+	 			<th>操作</th>
 			</tr>
 					
 		
@@ -42,12 +42,14 @@
 			<tbody>
 	 	
 	 		<tr v-for="course in clsList">
-	 			<td><input type="checkbox" v-model="cls_ids" :value="course.cus_id" /></td>
 	 			<td>{{ course.cus_id}}</td>
 	 			<td>{{ course.cus_name}}</td>
 	 			<td>{{ course.cus_xingzhi}}</td>
 	 			<td>{{ course.cus_score}}</td>
-	 			
+	 			<td>
+	 				<a href="#" @click="clsUpdTo(course)"  >修改</a>
+	 				<a href="#" @click="cusDelDo(course)" >删除</a>
+	 			</td>
 	 		</tr>
 	 		
 	 		
@@ -65,7 +67,7 @@
 		    <input v-model="course.cus_id" type="text" class="form-control" id="cls-add-id" placeholder="请输入分类名称">		   
 		  </div>
 		  <div class="form-group">
-		    <label for="cls-add-name">课程名称</label>
+		    <label for="course-add-name">课程名称</label>
 		    <input v-model="course.cus_name" type="text" class="form-control" id="cls-add-name" placeholder="请输入分类名称">		   
 		  </div>
 		  <div class="form-group">
@@ -85,17 +87,22 @@
 	<div id="cls-win-upd" style="display: none;padding:15px;" >
 		<form>
 		  <div class="form-group">
-		    <label for="cls-upd-id">分类编号</label>
-		    <input v-model="updcls.cls_id" type="text" readonly="readonly" class="form-control" id="cls-upd-id" placeholder="请输入分类名称">		   
+		    <label for="cls-add-id">课程编号</label>
+		    <input v-model="updcls.cus_id" type="text" class="form-control" id="cls-add-id" placeholder="请输入分类名称">		   
 		  </div>
 		  <div class="form-group">
-		    <label for="cls-upd-name">分类名称</label>
-		    <input v-model="updcls.cls_name" type="text" class="form-control" id="cls-upd-name" placeholder="请输入分类名称">		   
+		    <label for="cls-add-name">课程名称</label>
+		    <input v-model="updcls.cus_name" type="text" class="form-control" id="cls-add-name" placeholder="请输入分类名称">		   
 		  </div>
 		  <div class="form-group">
-		    <label for="cls-upd-remark">分类说明</label>
-		    <input v-model="updcls.cls_remark" type="text" class="form-control" id="cls-upd-remark" placeholder="请输入分类名称">		   
+		    <label for="cls-add-remark">课程性质</label>
+		    <input v-model="updcls.cus_xingzhi" type="text" class="form-control" id="cls-add-remark" placeholder="请输入分类名称">		   
 		  </div>
+		  <div class="form-group">
+		    <label for="cls-add-score">课程学分</label>
+		    <input v-model="updcls.cus_score" type="text" class="form-control" id="cls-add-score" placeholder="请输入分类名称">		   
+		  </div>
+		  
 		  <button @click="clsUpdDo" type="button" class="btn btn-primary">提交</button>
 		</form>	
 	</div>
@@ -126,7 +133,6 @@
 			clsList:[],
 			dlg:null,
 			course:{},//绑定新增窗体
-			cls_ids:[],//绑定复选框
 			updcls:{},//绑定修改窗体
 			
 		},
@@ -185,7 +191,7 @@
 			//弹出修改窗体-end
 			
 			//执行修改-start
-			clsUpdDo(){
+			clsUpdDo(course){
 				My.operate(
 						{
 							title:'您确实要修改该分类信息吗？',
@@ -204,12 +210,12 @@
 			//执行修改-end
 			
 			//执行删除-start
-			clsDelDo(course){
+			cusDelDo(course){
 				My.operate(
 						{
 							title:'您确实要选择该课程吗？',
 							text:'如果一旦选中，则无法恢复！',
-							url:'clsDelDo',
+							url:'cusDelDo',
 							data:{cus_id:course.cus_id}
 						},
 						
@@ -221,37 +227,6 @@
 				);
 			},
 			//执行删除-end
-			
-
-			//执行批量选择-start
-			clsAddMultiDo(){
-				
-				
-				//js中 undefined 、 null 、 0 都可以自动转化为假（false）
-				if(!this.cls_ids || this.cls_ids.length==0){
-					swal("请选择数据！", "", "info");
-					return;
-				}
-				
-				
-				
-				My.operate(
-						{
-							title:'您确实要选择这些课吗？',
-							text:'如果一旦选中，则可在“个人课表”处修改！',
-							url:'clsAddMultiDo',
-							data:{cls_ids:this.cls_ids}
-						},
-						
-						() => {
-							this.loadClsList();
-							My.close(this.dlg);
-							this.cls_ids=[];//清除数据
-						}
-				
-				);
-			},
-			//执行批量增加-end
 			
 			
 			//加载分类信息-start

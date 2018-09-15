@@ -24,15 +24,20 @@ public class StuController {
 	
 	@RequestMapping("/stuUpdDo")
 	//提交所有修改
-	public Object updstu(students students){
+	public Object updatestu(students students){
 				
-		  MyDao.update("update students set stu_telephone = ?,stu_state = ? ,stu_address = ? where stu_xuehao = ?" ,
-				 students.getStu_telephone(),students.getStu_state(),students.getStu_address(),students.getStu_xuehao());
+		  MyDao.update("update students set stu_telephone = ?,stu_state = ? ,stu_address = ?, tag = ? where stu_xuehao = ?" ,
+				 students.getStu_telephone(),students.getStu_state(),students.getStu_address(),1,students.getStu_xuehao());
 		  
 		  
 		  return ResultDto.successResult("修改分类成功！");
 	
 	}
 	
+	
+	
+	
+	}
+	
 
-}
+

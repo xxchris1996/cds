@@ -1,11 +1,18 @@
 package bean;
 
-public class Cls {
+public class Course {
 	
 	Integer cus_id;
 	String cus_name;
 	String cus_xingzhi;
 	String cus_score;
+	String cus_grade;
+	public String getCus_grade() {
+		return cus_grade;
+	}
+	public void setCus_grade(String cus_grade) {
+		this.cus_grade = cus_grade;
+	}
 	public Integer getCus_id() {
 		return cus_id;
 	}
